@@ -1,5 +1,5 @@
 const userModel = require('../models/user.model');
-const response = require('../shared/models/response.model');
+const response = require('../shared/handlers/response.handler');
 const bcrypt = require('bcrypt');
 const _ = require('underscore');
 const jwt = require('jsonwebtoken');

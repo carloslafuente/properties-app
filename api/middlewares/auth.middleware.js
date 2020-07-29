@@ -1,5 +1,5 @@
 const jwt = require('jsonwebtoken');
-const response = require('../shared/models/response.model');
+const response = require('../shared/handlers/response.handler');
 
 const verifyToken = async (req, res, next) => {
 	let token = req.get('Authorization');
