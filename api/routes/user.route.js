@@ -7,15 +7,15 @@ app.get('/user', verifyToken, (req, res) => {
 	user.getUsers(req, res);
 });
 
-app.post('/user', (req, res) => {
+app.post('/user', [verifyToken, verifyRole], (req, res) => {
 	user.createUser(req, res);
 });
 
-app.put('/user/:id', (req, res) => {
+app.put('/user/:id', verifyToken, (req, res) => {
 	user.updateUser(req, res);
 });
 
-app.delete('/user/:id', (req, res) => {
+app.delete('/user/:id', [verifyToken, verifyRole], (req, res) => {
 	user.disableUser(req, res);
 });
 

@@ -15,15 +15,16 @@ const verifyToken = async (req, res, next) => {
 	}
 };
 
-const verifyRole = (req, res, next) => {
+const verifyRole = async (req, res, next) => {
 	let user = req.user;
+	let code;
+	let error;
 	if (user.role !== 'ADMIN_ROLE') {
-		return res.status(401).json({
-			ok: false,
-			error: {
-				message: `No tienes autorizacion para realizar esta operacion`,
-			},
-		});
+		error = `No tienes autorizacion para realizar esta operacion`;
+		code = 401;
+		return res
+			.status(code)
+			.json(response.error(code, req.method, req.path, error));
 	}
 	next();
 };
