@@ -17,4 +17,9 @@ app.put('/user/:id', async (req, res) => {
 	user.updateUser();
 });
 
+app.delete('/user/:id', async (req, res) => {
+	const user = new User(req, res);
+	user.disableUser();
+});
+
 module.exports = app;

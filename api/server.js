@@ -15,15 +15,29 @@ mongoose.set('useFindAndModify', false);
 
 app.use(routes);
 
-mongoose
-	.connect(uri)
-	.then(() => {
-		console.log(`[Database] Mongo database connected successfully`);
-	})
-	.catch((err) => {
+const connect = async () => {
+	let con;
+	try {
+		con = await mongoose.connect(uri);
+	} catch (err) {
 		console.error(err);
-	});
+	}
+	if (con) {
+		console.log(`[Database] Mongo database connected successfully`);
+	}
+};
 
-app.listen(port, () => {
-	console.log(`[Server] Server is running on port: ${port}`);
-});
+const init = async () => {
+	let result;
+	try {
+		result = await app.listen(port);
+	} catch (err) {
+		console.error(err);
+	}
+	if (result) {
+		connect();
+		console.log(`[Server] Server is running on port: ${port}`);
+	}
+};
+
+init();
