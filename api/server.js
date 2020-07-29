@@ -1,9 +1,9 @@
+require('./config/env.config');
 const express = require('express');
 const app = express();
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 const routes = require('./routes/index.route');
-const { port, uri } = require('./env.config');
 
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
@@ -18,7 +18,7 @@ app.use(routes);
 const connect = async () => {
 	let con;
 	try {
-		con = await mongoose.connect(uri);
+		con = await mongoose.connect(process.env.URL_DB);
 	} catch (err) {
 		console.error(err);
 	}
@@ -30,13 +30,13 @@ const connect = async () => {
 const init = async () => {
 	let result;
 	try {
-		result = await app.listen(port);
+		result = await app.listen(process.env.PORT);
 	} catch (err) {
 		console.error(err);
 	}
 	if (result) {
 		connect();
-		console.log(`[Server] Server is running on port: ${port}`);
+		console.log(`[Server] Server is running on port: ${process.env.PORT}`);
 	}
 };
 

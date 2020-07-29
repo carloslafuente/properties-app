@@ -1,25 +1,22 @@
 const express = require('express');
 const app = express();
-const User = require('../controllers/user.controller');
+const user = require('../controllers/user.controller');
+const { verifyToken, verifyRole } = require('../middlewares/auth.middleware');
 
-app.get('/user', async (req, res) => {
-	const user = new User(req, res);
-	user.getUsers();
+app.get('/user', verifyToken, (req, res) => {
+	user.getUsers(req, res);
 });
 
-app.post('/user', async (req, res) => {
-	const user = new User(req, res);
-	user.createUser();
+app.post('/user', (req, res) => {
+	user.createUser(req, res);
 });
 
-app.put('/user/:id', async (req, res) => {
-	const user = new User(req, res);
-	user.updateUser();
+app.put('/user/:id', (req, res) => {
+	user.updateUser(req, res);
 });
 
-app.delete('/user/:id', async (req, res) => {
-	const user = new User(req, res);
-	user.disableUser();
+app.delete('/user/:id', (req, res) => {
+	user.disableUser(req, res);
 });
 
 module.exports = app;

@@ -8,6 +8,10 @@ const codes = [
 		message: 'Bad Request',
 	},
 	{
+		code: 401,
+		message: 'Unauthorized',
+	},
+	{
 		code: 404,
 		message: 'Not Found',
 	},
@@ -16,12 +20,13 @@ const codes = [
 		message: 'Internal Server Error',
 	},
 ];
-const success = (code, method, path, result) => {
+const success = (code, method, path, result, token) => {
 	return {
 		code,
 		message: `[Success]: On ${method} ${path} operation`,
 		result,
 		error: null,
+		token,
 	};
 };
 const error = (code, method, path, error) => {
