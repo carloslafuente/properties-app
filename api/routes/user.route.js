@@ -7,7 +7,7 @@ app.get('/user', verifyToken, (req, res) => {
 	user.getUsers(req, res);
 });
 
-app.post('/user', [verifyToken, verifyRole], (req, res) => {
+app.post('/user', (req, res) => {
 	user.createUser(req, res);
 });
 
