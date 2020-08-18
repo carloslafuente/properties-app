@@ -33,12 +33,11 @@ const createCountry = async (req, res) => {
 		try {
 			result = await country.save();
 		} catch (err) {
-			console.log(err);
+			console.error(err);
 			error = err;
 		}
 		if (error) {
 			code = 500;
-			console.error(error);
 			res.status(code).json(response.error(code, req.method, req.path, error));
 		} else {
 			code = 200;
@@ -48,7 +47,7 @@ const createCountry = async (req, res) => {
 		}
 	} else {
 		code = 500;
-		error = 'El pais que intentas agregar ya existe';
+		error = { message: 'El pais que intentas agregar ya existe' };
 		console.error(error);
 		res.status(code).json(response.error(code, req.method, req.path, error));
 	}
