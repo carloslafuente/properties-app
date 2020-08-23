@@ -77,7 +77,24 @@ const updateCity = async (req, res) => {
 	}
 };
 
-const deleteCity = async (req, res) => {};
+const deleteCity = async (req, res) => {
+	let result;
+	let error;
+	let code;
+	try {
+		result = await cityModel.findOneAndRemove({ _id: req.params.id });
+	} catch (err) {
+		error = err;
+		console.error(error);
+	}
+	if (error) {
+		code = 500;
+		res.status(code).json(response.error(code, req.method, req.path, error));
+	} else {
+		code = 200;
+		res.status(code).json(response.success(code, req.method, req.path, result));
+	}
+};
 
 const verifyCityName = async (city) => {
 	let result;

@@ -29,18 +29,4 @@ const verifyRole = async (req, res, next) => {
 	next();
 };
 
-const verifyImageToken = (req, res, next) => {
-	let token = req.query.token;
-	jwt.verify(token, process.env.JWT_SECRET.toString(), (error, decoded) => {
-		if (error) {
-			return res.status(401).json({
-				ok: false,
-				error,
-			});
-		}
-		req.user = decoded.user;
-		next();
-	});
-};
-
-module.exports = { verifyToken, verifyRole, verifyImageToken };
+module.exports = { verifyToken, verifyRole };
