@@ -23,6 +23,28 @@ const getUsers = async (req, res) => {
 	}
 };
 
+const getUserById = async (req, res) => {
+	let result;
+	let error;
+	let code;
+	try {
+		result = await userModel.findById(
+			req.params.id,
+			'name email role status google contact'
+		);
+	} catch (err) {
+		console.error(err);
+		error = err;
+	}
+	if (error) {
+		code = 500;
+		res.status(code).json(response.error(code, req.method, req.path, error));
+	} else {
+		code = 200;
+		res.status(code).json(response.success(code, req.method, req.path, result));
+	}
+};
+
 const createUser = async (req, res) => {
 	let body = req.body;
 	let result;
@@ -149,6 +171,7 @@ const loginUser = async (req, res) => {
 
 module.exports = {
 	getUsers,
+	getUserById,
 	createUser,
 	updateUser,
 	disableUser,

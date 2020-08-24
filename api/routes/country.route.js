@@ -7,6 +7,10 @@ app.get('/country', (req, res) => {
 	country.getCountries(req, res);
 });
 
+app.get('/country/:id', (req, res) => {
+	country.getCountryById(req, res);
+});
+
 app.post('/country', [verifyToken, verifyRole], (req, res) => {
 	country.createCountry(req, res);
 });

@@ -1,5 +1,6 @@
 const cityModel = require('../models/city.model');
 const response = require('../shared/handlers/response.handler');
+const _ = require('underscore');
 
 const getCities = async (req, res) => {
 	let result;
@@ -7,6 +8,25 @@ const getCities = async (req, res) => {
 	let code;
 	try {
 		result = await cityModel.find({}).populate('country').exec();
+	} catch (err) {
+		console.error(err);
+		error = err;
+	}
+	if (error) {
+		code = 500;
+		res.status(code).json(response.error(code, req.method, req.path, error));
+	} else {
+		code = 200;
+		res.status(code).json(response.success(code, req.method, req.path, result));
+	}
+};
+
+const getCityById = async (req, res) => {
+	let result;
+	let error;
+	let code;
+	try {
+		result = await cityModel.findById(req.params.id).populate('country').exec();
 	} catch (err) {
 		console.error(err);
 		error = err;
@@ -57,10 +77,10 @@ const updateCity = async (req, res) => {
 	let result;
 	let error;
 	let code;
-	let cityName = req.body.name.toString().toLowerCase();
-	let newCity = { name: cityName };
+	let body = _.pick(req.body, ['name', 'country']);
+	body.name ? (body.name = body.name.toString().toLowerCase()) : '';
 	try {
-		result = await cityModel.findByIdAndUpdate(req.params.id, newCity, {
+		result = await cityModel.findByIdAndUpdate(req.params.id, body, {
 			new: true,
 			runValidators: true,
 		});
@@ -116,6 +136,7 @@ const verifyCityName = async (city) => {
 
 module.exports = {
 	getCities,
+	getCityById,
 	createCity,
 	updateCity,
 	deleteCity,

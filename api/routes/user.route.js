@@ -7,6 +7,10 @@ app.get('/user', verifyToken, (req, res) => {
 	user.getUsers(req, res);
 });
 
+app.get('/user/:id', verifyToken, (req, res) => {
+	user.getUserById(req, res);
+});
+
 app.post('/user', (req, res) => {
 	user.createUser(req, res);
 });

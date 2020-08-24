@@ -4,6 +4,7 @@ const Schema = mongoose.Schema;
 const citySchema = new Schema({
 	name: {
 		type: String,
+		unique: true,
 		required: [true, 'El nombre es obligatorio'],
 	},
 	country: {

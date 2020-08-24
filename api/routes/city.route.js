@@ -7,6 +7,10 @@ app.get('/city', (req, res) => {
 	city.getCities(req, res);
 });
 
+app.get('/city/:id', (req, res) => {
+	city.getCityById(req, res);
+});
+
 app.post('/city', [verifyToken, verifyRole], (req, res) => {
 	city.createCity(req, res);
 });

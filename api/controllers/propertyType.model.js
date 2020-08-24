@@ -1,12 +1,13 @@
-const countryModel = require('../models/country.model');
+const propertyTypeModel = require('../models/propertyType.model');
 const response = require('../shared/handlers/response.handler');
+const _ = require('underscore');
 
-const getCountries = async (req, res) => {
+const getPropertyTypes = async (req, res) => {
 	let result;
 	let error;
 	let code;
 	try {
-		result = await countryModel.find({});
+		result = await propertyTypeModel.find({});
 	} catch (err) {
 		console.error(err);
 		error = err;
@@ -20,12 +21,12 @@ const getCountries = async (req, res) => {
 	}
 };
 
-const getCountryById = async (req, res) => {
+const getPropertyTypeById = async (req, res) => {
 	let result;
 	let error;
 	let code;
 	try {
-		result = await countryModel.findById(req.params.id);
+		result = await propertyTypeModel.findById(req.params.id);
 	} catch (err) {
 		console.error(err);
 		error = err;
@@ -39,18 +40,19 @@ const getCountryById = async (req, res) => {
 	}
 };
 
-const createCountry = async (req, res) => {
+const createPropertyType = async (req, res) => {
 	let result;
 	let error;
 	let code;
-	let countryName = req.body.name.toString().toLowerCase();
-	let country = new countryModel({
-		name: countryName,
+	let propertyTypeName = req.body.name.toString().toLowerCase();
+	let propertyType = new propertyTypeModel({
+		name: propertyTypeName,
+		description: req.body.description,
 	});
-	let countryExists = await verifyCountryName(country.name);
-	if (!countryExists) {
+	let propertyTypeExists = await verifyPropertyTypeName(propertyType.name);
+	if (!propertyTypeExists) {
 		try {
-			result = await country.save();
+			result = await propertyType.save();
 		} catch (err) {
 			console.error(err);
 			error = err;
@@ -66,20 +68,20 @@ const createCountry = async (req, res) => {
 		}
 	} else {
 		code = 500;
-		error = { message: 'El pais que intentas agregar ya existe' };
+		error = { message: 'El tipo de propiedad que intentas agregar ya existe' };
 		console.error(error);
 		res.status(code).json(response.error(code, req.method, req.path, error));
 	}
 };
 
-const updateCountry = async (req, res) => {
+const updateProperty = async (req, res) => {
 	let result;
 	let error;
 	let code;
-	let countryName = req.body.name.toString().toLowerCase();
-	let newCountry = { name: countryName };
+	let body = _.pick(req.body, ['name', 'description']);
+	body.name = body.name.toString().toLowerCase();
 	try {
-		result = await countryModel.findByIdAndUpdate(req.params.id, newCountry, {
+		result = await propertyTypeModel.findByIdAndUpdate(req.params.id, body, {
 			new: true,
 			runValidators: true,
 		});
@@ -96,12 +98,12 @@ const updateCountry = async (req, res) => {
 	}
 };
 
-const deleteCountry = async (req, res) => {
+const deleteProperty = async (req, res) => {
 	let result;
 	let error;
 	let code;
 	try {
-		result = await countryModel.findOneAndRemove({ _id: req.params.id });
+		result = await propertyTypeModel.findOneAndRemove({ _id: req.params.id });
 	} catch (err) {
 		error = err;
 		console.error(error);
@@ -115,10 +117,12 @@ const deleteCountry = async (req, res) => {
 	}
 };
 
-const verifyCountryName = async (countryName) => {
+const verifyPropertyTypeName = async (propertyTypeName) => {
 	let result;
 	try {
-		result = await countryModel.find({ name: countryName.toLowerCase() });
+		result = await propertyTypeModel.find({
+			name: propertyTypeName.toLowerCase(),
+		});
 	} catch (err) {
 		console.error(err);
 	}
@@ -130,9 +134,9 @@ const verifyCountryName = async (countryName) => {
 };
 
 module.exports = {
-	getCountries,
-	getCountryById,
-	createCountry,
-	updateCountry,
-	deleteCountry,
+	getPropertyTypes,
+	getPropertyTypeById,
+	createPropertyType,
+	updateProperty,
+	deleteProperty,
 };
